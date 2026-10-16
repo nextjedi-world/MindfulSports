@@ -7,9 +7,9 @@ backend.
 | | |
 |---|---|
 | Product id | `mindful-sports` (`NEXTJEDI_PRODUCT`) |
-| Stack | `kmp` (NextJedi platform; CI calls `nextjedi-world/platform/.github/workflows/ci-kmp.yml@main`) |
+| Stack | `kmp` (NextJedi platform). `ci.yml` and `claude-review.yml` inline the platform's `ci-kmp.yml` (jvm job) and `claude-review.yml`, because this repo is public and `nextjedi-world/platform` is private, so GitHub cannot resolve its reusable workflows from here. Switch back to `uses: nextjedi-world/platform/.github/workflows/ci-kmp.yml@main` once platform is public. |
 | Package | `com.ashutosh.mindfultennis` (Android `applicationId`, do not rename) |
-| Repo | github.com/nextjedi/MindfulSports (**public**); `upstream` = Ashutosh-909/MindfulTennis (never push there) |
+| Repo | github.com/nextjedi-world/MindfulSports (**public**); `upstream` = Ashutosh-909/MindfulTennis (never push there) |
 | Linear | team `NEX`, project **Mindful Sports**; platform adoption NEX-1071 |
 
 ## Commands (the repo contract)
