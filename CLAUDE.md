@@ -7,7 +7,7 @@ backend.
 | | |
 |---|---|
 | Product id | `mindful-sports` (`NEXTJEDI_PRODUCT`) |
-| Stack | `kmp` (NextJedi platform; CI calls `nextjedi/platform/.github/workflows/ci-kmp.yml@main`) |
+| Stack | `kmp` (NextJedi platform; CI calls `nextjedi-world/platform/.github/workflows/ci-kmp.yml@main`) |
 | Package | `com.ashutosh.mindfultennis` (Android `applicationId`, do not rename) |
 | Repo | github.com/nextjedi/MindfulSports (**public**); `upstream` = Ashutosh-909/MindfulTennis (never push there) |
 | Linear | team `NEX`, project **Mindful Sports**; platform adoption NEX-1071 |
@@ -84,6 +84,6 @@ then `make baseline`. Never add new entries to a baseline to get green.
 
 ## Claude Code specifics
 - Plugins `nextjedi-core` and `nextjedi-kmp` are enabled in `.claude/settings.json`
-  (marketplace `nextjedi/platform`, private: needs `gh auth setup-git` with read access). They
+  (marketplace `nextjedi-world/platform`, private: needs `gh auth setup-git` with read access). They
   carry the shared skills, the KMP reviewer and the Stop hook that runs `make verify`.
 - Project agent: `.claude/agents/mindful tennis.agent.md`.

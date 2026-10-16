@@ -1,6 +1,6 @@
 # Checks that the PR title is a conventional commit (it becomes the squash-merge commit that
 # release-please reads) and that the PR body references a Linear issue (Fixes NEX-123).
-# Inlined copy of nextjedi/platform commitlint.yml (platform is private; this repo is public).
+# Inlined copy of nextjedi-world/platform commitlint.yml (platform is private; this repo is public).
 name: commitlint
 
 on:
@@ -30,7 +30,7 @@ jobs:
           echo '{"private": true}' > "$dir/package.json"
           npm install --prefix "$dir" --no-audit --no-fund --silent \
             @commitlint/cli@21.2.3 @commitlint/config-conventional@21.2.3
-          # Same rules as commitlint.config.mjs in nextjedi/platform.
+          # Same rules as commitlint.config.mjs in nextjedi-world/platform.
           cat > "$dir/commitlint.config.mjs" <<'CONFIG'
           export default {
             extends: ['@commitlint/config-conventional'],
