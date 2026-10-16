@@ -1,3 +1,5 @@
+# Inlined (platform repo is private, so its reusable workflow cannot be called from this public repo).
+# Off until the repo variable CLAUDE_REVIEW_ENABLED is 'true' and CLAUDE_CODE_OAUTH_TOKEN is set.
 name: Claude mention
 
 on:
@@ -19,7 +21,22 @@ permissions:
 
 jobs:
   claude:
-    # Off until the repo variable CLAUDE_REVIEW_ENABLED is 'true' and CLAUDE_CODE_OAUTH_TOKEN is set.
-    if: vars.CLAUDE_REVIEW_ENABLED == 'true'
-    uses: nextjedi/platform/.github/workflows/claude-mention.yml@main
-    secrets: inherit
+    if: |
+      vars.CLAUDE_REVIEW_ENABLED == 'true' && (
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))))
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |
+            actions: read
+          claude_args: |
+            --allowedTools "Bash(make verify),Bash(make setup)"

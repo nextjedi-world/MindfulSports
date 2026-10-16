@@ -1,3 +1,6 @@
+# Inlined from nextjedi/platform ci-kmp.yml (jvm job). This repo is public and the platform repo is
+# private, so GitHub cannot resolve its reusable workflows or composite actions from here.
+# Revert to `uses: nextjedi/platform/.github/workflows/ci-kmp.yml@main` once platform is public.
 name: CI
 
 on:
@@ -14,11 +17,29 @@ permissions:
   contents: read
 
 jobs:
-  kmp:
-    uses: nextjedi/platform/.github/workflows/ci-kmp.yml@main
-    with:
-      working-directory: .
-      java-version: "21"
-      # Public repo: never run on self-hosted runners, so the Mac (iOS) job stays off.
-      run-ios: false
-    secrets: inherit
+  verify:
+    name: verify (kmp jvm/android)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: temurin
+      - uses: gradle/actions/setup-gradle@v4
+      - name: make verify
+        run: |
+          chmod +x gradlew
+          make setup
+          make verify
+      - name: Upload test reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-kmp-jvm
+          if-no-files-found: ignore
+          path: |
+            **/build/test-results/
+            **/build/reports/tests/
+            **/build/reports/lint-results*.html
