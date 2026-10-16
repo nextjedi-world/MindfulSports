@@ -1,6 +1,6 @@
-# Inlined from nextjedi/platform ci-kmp.yml (jvm job). This repo is public and the platform repo is
+# Inlined from nextjedi-world/platform ci-kmp.yml (jvm job). This repo is public and the platform repo is
 # private, so GitHub cannot resolve its reusable workflows or composite actions from here.
-# Revert to `uses: nextjedi/platform/.github/workflows/ci-kmp.yml@main` once platform is public.
+# Revert to `uses: nextjedi-world/platform/.github/workflows/ci-kmp.yml@main` once platform is public.
 name: CI
 
 on:
