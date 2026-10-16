@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:LoginViewModel.kt$LoginViewModel$private fun signInWithEmail()</ID>
+    <ID>CyclomaticComplexMethod:PerformanceChart.kt$@Composable private fun TrendLineChart( trend: List&lt;PerformanceTrend&gt;, kpi: TrendKpi, modifier: Modifier = Modifier, )</ID>
+    <ID>FunctionNaming:AndroidSyncScheduler.kt$AndroidSyncScheduler$private fun delayUntilNext1_30am(): Long</ID>
+    <ID>FunctionNaming:IosSyncScheduler.kt$IosSyncScheduler$private fun nextOccurrenceOf1_30am(): NSDate</ID>
+    <ID>FunctionNaming:MainViewController.kt$fun MainViewController()</ID>
+    <ID>LongMethod:AspectPerformanceCard.kt$@OptIn(ExperimentalLayoutApi::class) @Composable fun AspectPerformanceCard( selfAspectAverages: Map&lt;Aspect, Float&gt;, partnerAspectAverages: Map&lt;Aspect, Float&gt;, selectedRatingType: RatingType, onRatingTypeSelected: (RatingType) -&gt; Unit, isLoading: Boolean, error: String?, onRetry: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:CalendarHeatmap.kt$@Composable fun CalendarHeatmap( dailyScores: Map&lt;String, Int?&gt;, selectedDuration: DurationFilter, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:CalendarHeatmap.kt$@Composable private fun CalendarGrid( year: Int, month: Month, dailyScores: Map&lt;LocalDate, Int?&gt;, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:EndSessionScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun EndSessionContent( state: EndSessionUiState, onEvent: (EndSessionUiEvent) -&gt; Unit, onNavigateBack: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:EndSessionViewModel.kt$EndSessionViewModel$private fun submit()</ID>
+    <ID>LongMethod:FocusPointsRow.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun FocusPointsRow( focusPoints: List&lt;FocusPoint&gt;, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:HomeScreen.kt$@Composable private fun BottomButtonBar( hasActiveSession: Boolean, onShowSessions: () -&gt; Unit, onStartOrEnd: () -&gt; Unit, onCancel: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:HomeScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun HomeScreenContent( state: HomeUiState, onEvent: (HomeUiEvent) -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:LoginScreen.kt$@Composable fun LoginScreen( viewModel: LoginViewModel, onSignedIn: () -&gt; Unit, )</ID>
+    <ID>LongMethod:LoginScreen.kt$@Composable private fun EmailPasswordForm( email: String, password: String, isSignUpMode: Boolean, isLoading: Boolean, onEmailChanged: (String) -&gt; Unit, onPasswordChanged: (String) -&gt; Unit, onSubmit: () -&gt; Unit, onToggleMode: () -&gt; Unit, )</ID>
+    <ID>LongMethod:LoginViewModel.kt$LoginViewModel$private fun signInWithEmail()</ID>
+    <ID>LongMethod:NavGraph.kt$@Composable fun NavGraph( navController: NavHostController, isAuthenticated: Boolean, pendingCancelSessionId: String? = null, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:PerformanceChart.kt$@Composable private fun TrendLineChart( trend: List&lt;PerformanceTrend&gt;, kpi: TrendKpi, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:RadarChart.kt$@Composable fun RadarChart( selfData: Map&lt;Aspect, Float&gt;, partnerData: Map&lt;Aspect, Float&gt;, modifier: Modifier = Modifier, selfColor: Color = MaterialTheme.colorScheme.primary, partnerColor: Color = MaterialTheme.colorScheme.tertiary, gridColor: Color = MaterialTheme.colorScheme.outlineVariant, labelColor: Color = MaterialTheme.colorScheme.onSurface, maxValue: Float = 5f, gridLevels: Int = 5, )</ID>
+    <ID>LongMethod:SessionDetailScreen.kt$@Composable private fun SessionOverviewCard( session: Session, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SessionDetailScreen.kt$@Composable private fun SetScoresCard( setScores: List&lt;SetScore&gt;, opponentNames: Map&lt;String, String&gt; = emptyMap(), modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SessionDetailScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun SessionDetailContent( state: SessionDetailUiState, onEvent: (SessionDetailUiEvent) -&gt; Unit, onNavigateBack: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SessionsListScreen.kt$@Composable private fun SessionCard( session: Session, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SessionsListScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun SessionsListContent( state: SessionsListUiState, onEvent: (SessionsListUiEvent) -&gt; Unit, onNavigateBack: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SetScoreSection.kt$@Composable private fun SetScoreBlockInput( setNumber: Int, setRow: SetScoreRow, opponents: List&lt;Opponent&gt;, partners: List&lt;Partner&gt;, onSetRowChanged: (SetScoreRow) -&gt; Unit, onCreateOpponent: (String) -&gt; Unit, onCreatePartner: (String) -&gt; Unit, canRemove: Boolean, onRemove: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SetScoreSection.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun OpponentDropdown( selectedOpponent: Opponent?, opponents: List&lt;Opponent&gt;, onSelected: (Opponent?) -&gt; Unit, onCreateNew: (String) -&gt; Unit, label: String, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SetScoreSection.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun PartnerDropdown( selectedPartner: Partner?, partners: List&lt;Partner&gt;, onSelected: (Partner?) -&gt; Unit, onCreateNew: (String) -&gt; Unit, label: String, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SetScoreSection.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun SetScoreDialog( initialData: SetScoreInputData, opponents: List&lt;Opponent&gt;, partners: List&lt;Partner&gt;, onSave: (SetScoreInputData) -&gt; Unit, onDismiss: () -&gt; Unit, onCreateOpponent: (String) -&gt; Unit, onCreatePartner: (String) -&gt; Unit, )</ID>
+    <ID>LongMethod:SettingsScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun SettingsScreenContent( state: SettingsUiState, onEvent: (SettingsUiEvent) -&gt; Unit, onNavigateBack: () -&gt; Unit, snackbarHostState: SnackbarHostState, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:SplashScreen.kt$@Composable fun SplashScreen( modifier: Modifier = Modifier, onAnimationComplete: () -&gt; Unit = {}, )</ID>
+    <ID>LongMethod:StartSessionScreen.kt$@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class) @Composable private fun StartSessionContent( state: StartSessionUiState, onEvent: (StartSessionUiEvent) -&gt; Unit, onNavigateBack: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongParameterList:HomeViewModel.kt$HomeViewModel$( private val authRepository: AuthRepository, private val sessionRepository: SessionRepository, private val opponentRepository: OpponentRepository, private val userPreferences: UserPreferences, private val initialSyncManager: InitialSyncManager, private val syncManager: com.ashutosh.mindfultennis.data.sync.SyncManager, private val cancelSessionUseCase: CancelSessionUseCase, private val getPerformanceTrendUseCase: GetPerformanceTrendUseCase, private val getWinLossRecordUseCase: GetWinLossRecordUseCase, private val getAspectAveragesUseCase: GetAspectAveragesUseCase, )</ID>
+    <ID>LongParameterList:InitialSyncManager.kt$InitialSyncManager$( private val sessionDao: SessionDao, private val selfRatingDao: SelfRatingDao, private val partnerRatingDao: PartnerRatingDao, private val setScoreDao: SetScoreDao, private val focusPointDao: FocusPointDao, private val opponentDao: OpponentDao, private val partnerDao: PartnerDao, private val remoteDataSource: SupabaseSessionDataSource, private val userPreferences: UserPreferences, )</ID>
+    <ID>LongParameterList:RadarChart.kt$( data: Map&lt;Aspect, Float&gt;, aspects: List&lt;Aspect&gt;, centerX: Float, centerY: Float, radius: Float, maxValue: Float, startAngle: Float, angleStep: Float, )</ID>
+    <ID>LongParameterList:RadarChart.kt$( data: Map&lt;Aspect, Float&gt;, aspects: List&lt;Aspect&gt;, centerX: Float, centerY: Float, radius: Float, maxValue: Float, startAngle: Float, angleStep: Float, baseColor: Color, )</ID>
+    <ID>LongParameterList:SubmitRatingsUseCase.kt$SubmitRatingsUseCase$( sessionId: String, selfRatings: List&lt;Rating&gt;, partnerRatings: List&lt;Rating&gt;, setScores: List&lt;SetScore&gt;, notes: String?, matchType: MatchType, opponent1Id: String?, opponent2Id: String?, partnerId: String?, )</ID>
+    <ID>LongParameterList:SyncManager.kt$SyncManager$( private val sessionDao: SessionDao, private val selfRatingDao: SelfRatingDao, private val partnerRatingDao: PartnerRatingDao, private val setScoreDao: SetScoreDao, private val focusPointDao: FocusPointDao, private val opponentDao: OpponentDao, private val partnerDao: PartnerDao, private val remoteDataSource: SupabaseSessionDataSource, private val userDataSource: SupabaseUserDataSource, private val supabaseClient: SupabaseClient, private val userPreferences: UserPreferences, )</ID>
+    <ID>LoopWithTooManyJumpStatements:GetWinLossRecordUseCase.kt$GetWinLossRecordUseCase$for</ID>
+    <ID>MagicNumber:AndroidSyncScheduler.kt$AndroidSyncScheduler$24</ID>
+    <ID>MagicNumber:AndroidSyncScheduler.kt$AndroidSyncScheduler$30</ID>
+    <ID>MagicNumber:DateTimeUtils.kt$DateTimeUtils$12</ID>
+    <ID>MagicNumber:DateTimeUtils.kt$DateTimeUtils$60</ID>
+    <ID>MagicNumber:DateTimeUtils.kt$DateTimeUtils$60_000</ID>
+    <ID>MagicNumber:HomeViewModel.kt$HomeViewModel$1_000L</ID>
+    <ID>MagicNumber:IosSyncScheduler.kt$IosSyncScheduler$30</ID>
+    <ID>MagicNumber:LoginViewModel.kt$LoginViewModel$100</ID>
+    <ID>MagicNumber:LoginViewModel.kt$LoginViewModel$6</ID>
+    <ID>MagicNumber:PerformanceChart.kt$10</ID>
+    <ID>MagicNumber:PerformanceChart.kt$TrendKpi.Companion$4</ID>
+    <ID>MagicNumber:RadarChart.kt$0.5f</ID>
+    <ID>MagicNumber:RadarChart.kt$0xFF43A047</ID>
+    <ID>MagicNumber:RadarChart.kt$0xFFE53935</ID>
+    <ID>MagicNumber:RadarChart.kt$0xFFFFA726</ID>
+    <ID>MagicNumber:ScoreCalculator.kt$ScoreCalculator$100.0</ID>
+    <ID>MagicNumber:ScoreCalculator.kt$ScoreCalculator$4.0</ID>
+    <ID>MagicNumber:ScoreCalculator.kt$ScoreCalculator$40</ID>
+    <ID>MagicNumber:ScoreCalculator.kt$ScoreCalculator$70</ID>
+    <ID>MagicNumber:SessionDetailScreen.kt$40</ID>
+    <ID>MagicNumber:SessionDetailScreen.kt$70</ID>
+    <ID>MagicNumber:SessionsListScreen.kt$40</ID>
+    <ID>MagicNumber:SessionsListScreen.kt$70</ID>
+    <ID>MagicNumber:SettingsViewModel.kt$SettingsViewModel$100</ID>
+    <ID>MagicNumber:SupabaseSessionDataSource.kt$SupabaseSessionDataSource$100</ID>
+    <ID>MagicNumber:SupabaseSessionDataSource.kt$SupabaseSessionDataSource$5</ID>
+    <ID>MagicNumber:SupabaseSessionDataSource.kt$SupabaseSessionDataSource$8</ID>
+    <ID>MagicNumber:SyncWorker.kt$SyncWorker$3</ID>
+    <ID>MaxLineLength:EndSessionScreen.kt$"Session: Started ${DateTimeUtils.formatDate(session.startedAt)} at ${DateTimeUtils.formatTime(session.startedAt)}"</ID>
+    <ID>MaxLineLength:FocusPointDao.kt$FocusPointDao$@Query("SELECT * FROM focus_points WHERE user_id = :userId AND sync_status != 'PENDING_DELETE' ORDER BY created_at DESC")</ID>
+    <ID>MaxLineLength:HomeScreen.kt$text = "Started at ${DateTimeUtils.formatTime(startedAt)} \u2022 ${DateTimeUtils.formatDuration(elapsedMs)}"</ID>
+    <ID>MaxLineLength:HomeViewModel.kt$HomeViewModel$it.copy(activeSessionElapsedMs = kotlinx.datetime.Clock.System.now().toEpochMilliseconds() - startedAt)</ID>
+    <ID>MaxLineLength:KoinHelper.kt$single { AppConfig(supabaseUrl = supabaseUrl, supabaseAnonKey = supabaseAnonKey, deepLinkScheme = "com.nextjedi.mindful-tennis") }</ID>
+    <ID>MaxLineLength:LoginScreen.kt$drawLine(color, Offset(centerX, courtBottom), Offset(centerX, courtBottom - markLength), strokeWidth, StrokeCap.Round)</ID>
+    <ID>MaxLineLength:LoginScreen.kt$drawLine(color, Offset(centerX, courtTop + serviceLineOffset), Offset(centerX, courtBottom - serviceLineOffset), strokeWidth, StrokeCap.Round)</ID>
+    <ID>MaxLineLength:LoginScreen.kt$drawLine(color, Offset(courtLeft + singlesInset, courtBottom - serviceLineOffset), Offset(courtRight - singlesInset, courtBottom - serviceLineOffset), strokeWidth, StrokeCap.Round)</ID>
+    <ID>MaxLineLength:LoginScreen.kt$drawLine(color, Offset(courtLeft + singlesInset, courtTop + serviceLineOffset), Offset(courtRight - singlesInset, courtTop + serviceLineOffset), strokeWidth, StrokeCap.Round)</ID>
+    <ID>MaxLineLength:LoginScreen.kt$drawLine(color, Offset(courtLeft + singlesInset, courtTop), Offset(courtLeft + singlesInset, courtBottom), strokeWidth, StrokeCap.Round)</ID>
+    <ID>MaxLineLength:LoginScreen.kt$drawLine(color, Offset(courtRight - singlesInset, courtTop), Offset(courtRight - singlesInset, courtBottom), strokeWidth, StrokeCap.Round)</ID>
+    <ID>MaxLineLength:LoginViewModel.kt$LoginViewModel$msg.contains("email address", ignoreCase = true) &amp;&amp; msg.contains("invalid", ignoreCase = true)</ID>
+    <ID>MaxLineLength:SessionDao.kt$SessionDao$@Query("SELECT * FROM sessions WHERE user_id = :userId AND is_active = 1 AND sync_status != 'PENDING_DELETE' LIMIT 1")</ID>
+    <ID>MaxLineLength:SessionDao.kt$SessionDao$@Query("SELECT * FROM sessions WHERE user_id = :userId AND sync_status != 'PENDING_DELETE' ORDER BY started_at DESC")</ID>
+    <ID>MaxLineLength:SettingsScreen.kt$"${local.month.name.lowercase().replaceFirstChar { it.uppercase() }} ${local.dayOfMonth}, ${local.year} at ${local.hour.toString().padStart(2, '0')}:${local.minute.toString().padStart(2, '0')}"</ID>
+    <ID>MaxLineLength:SettingsViewModel.kt$SettingsViewModel$syncResult = if (result.isSuccess) "Sync completed" else "Sync failed: ${result.exceptionOrNull()?.message}"</ID>
+    <ID>NewLineAtEndOfFile:Type.kt$com.ashutosh.mindfultennis.ui.theme.Type.kt</ID>
+    <ID>ReturnCount:GetAspectAveragesUseCase.kt$GetAspectAveragesUseCase$private suspend fun computeAverages( sessions: List&lt;Session&gt;, ratingType: RatingType, ): Map&lt;Aspect, Float&gt;</ID>
+    <ID>ReturnCount:GetWinLossRecordUseCase.kt$GetWinLossRecordUseCase$private suspend fun computeGameWinLoss(sessions: List&lt;Session&gt;): WinLossRecord</ID>
+    <ID>ReturnCount:GetWinLossRecordUseCase.kt$GetWinLossRecordUseCase$private suspend fun computeSetWinLoss(sessions: List&lt;Session&gt;): WinLossRecord</ID>
+    <ID>ReturnCount:LoginViewModel.kt$LoginViewModel$private fun signInWithEmail()</ID>
+    <ID>ReturnCount:StartSessionUseCase.kt$StartSessionUseCase$suspend operator fun invoke(focusNote: String): Result&lt;Session&gt;</ID>
+    <ID>TooGenericExceptionCaught:AuthRepositoryImpl.kt$AuthRepositoryImpl$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:InitialSyncManager.kt$InitialSyncManager$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:SettingsViewModel.kt$SettingsViewModel$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:SyncManager.kt$SyncManager$e: Exception</ID>
+    <ID>TooManyFunctions:EntityMappers.kt$com.ashutosh.mindfultennis.data.local.db.entity.EntityMappers.kt</ID>
+    <ID>TooManyFunctions:HomeViewModel.kt$HomeViewModel : ViewModel</ID>
+    <ID>TooManyFunctions:SessionDao.kt$SessionDao</ID>
+    <ID>TooManyFunctions:SessionDetailScreen.kt$com.ashutosh.mindfultennis.ui.sessions.SessionDetailScreen.kt</ID>
+    <ID>TooManyFunctions:SessionRepository.kt$SessionRepository</ID>
+    <ID>TooManyFunctions:SessionRepositoryImpl.kt$SessionRepositoryImpl : SessionRepository</ID>
+    <ID>TooManyFunctions:SupabaseSessionDataSource.kt$SupabaseSessionDataSource</ID>
+    <ID>TooManyFunctions:SyncManager.kt$SyncManager</ID>
+    <ID>UnusedParameter:SetScoreSection.kt$opponents: List&lt;Opponent&gt;</ID>
+    <ID>UnusedParameter:SetScoreSection.kt$partners: List&lt;Partner&gt;</ID>
+    <ID>UnusedPrivateProperty:CalendarHeatmap.kt$val labelOffsetX = 0f</ID>
+    <ID>UseCheckOrError:SessionRepositoryImpl.kt$SessionRepositoryImpl$throw IllegalStateException("Session $sessionId not found")</ID>
+    <ID>UseCheckOrError:SubmitRatingsUseCase.kt$SubmitRatingsUseCase$throw IllegalStateException("Session $sessionId not found")</ID>
+    <ID>VariableNaming:IosSyncScheduler.kt$IosSyncScheduler$val todayAt1_30 = calendar.dateFromComponents(parts) ?: return now</ID>
+  </CurrentIssues>
+</SmellBaseline>

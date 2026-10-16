@@ -19,3 +19,12 @@ keystore.properties
 
 # iOS secrets
 iosApp/Configuration/Secrets.xcconfig
+
+# Local env (see .env.example)
+.env
+.env.*
+!.env.example
+
+# Crash logs from local JVM runs
+hs_err_pid*.log
+replay_pid*.log

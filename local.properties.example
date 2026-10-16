@@ -1,0 +1,5 @@
+# Copy to local.properties (git-ignored). Names only; never commit real values.
+# Read by composeApp/build.gradle.kts into BuildConfig. Empty values build fine (no backend).
+sdk.dir=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
