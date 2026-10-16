@@ -1,0 +1,222 @@
+# Store release for Mindful Sports: signed AAB -> Play internal track, IPA -> TestFlight, via fastlane.
+# Replaces azure-pipelines/ (android-pipeline.yml, ios-pipeline.yml, templates/). NEX-1100.
+#
+# Triggers: workflow_dispatch and tags v*. It never runs on push to main (the Azure pipelines did).
+# Public repo: GitHub-hosted runners only (ubuntu for Android, macos for iOS), no private reusable workflows.
+# Build jobs use the GitHub environment `production`; add a required reviewer there to gate every release.
+# Secrets are repository secrets (the preflight job reads them, which environment-scoped secrets would hide).
+# A platform whose secrets are missing is skipped and the run stays green; the run summary names what is missing.
+#
+# Repository secrets (names only):
+#   Android: ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, PLAY_SERVICE_ACCOUNT_JSON,
+#            SUPABASE_URL, SUPABASE_ANON_KEY, REVENUECAT_ANDROID_KEY      (ANDROID_KEY_PASSWORD optional, defaults to the store password)
+#   iOS:     ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8_BASE64, APPLE_TEAM_ID, MATCH_PASSWORD,
+#            AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY (fastlane/Matchfile keeps certs in Azure Blob),
+#            SUPABASE_URL, SUPABASE_ANON_KEY, REVENUECAT_IOS_KEY
+# Optional repository variables: ANDROID_PACKAGE_NAME, IOS_BUNDLE_ID, IOS_SCHEME (defaults in fastlane/Fastfile).
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: "Which stores to upload to"
+        type: choice
+        options: [both, android, ios]
+        default: both
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  PLATFORMS: ${{ inputs.platforms || 'both' }}
+
+jobs:
+  preflight:
+    name: preflight (secrets present?)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      android: ${{ steps.check.outputs.android }}
+      ios: ${{ steps.check.outputs.ios }}
+    steps:
+      - name: Check secrets
+        id: check
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          REVENUECAT_ANDROID_KEY: ${{ secrets.REVENUECAT_ANDROID_KEY }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCESS_KEY }}
+          REVENUECAT_IOS_KEY: ${{ secrets.REVENUECAT_IOS_KEY }}
+        run: |
+          missing_android=""
+          for n in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS PLAY_SERVICE_ACCOUNT_JSON SUPABASE_URL SUPABASE_ANON_KEY REVENUECAT_ANDROID_KEY; do
+            [ -n "${!n}" ] || missing_android="$missing_android $n"
+          done
+          missing_ios=""
+          for n in ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8_BASE64 APPLE_TEAM_ID MATCH_PASSWORD AZURE_STORAGE_ACCOUNT AZURE_STORAGE_ACCESS_KEY SUPABASE_URL SUPABASE_ANON_KEY REVENUECAT_IOS_KEY; do
+            [ -n "${!n}" ] || missing_ios="$missing_ios $n"
+          done
+          want_android=false; want_ios=false
+          if [ "$PLATFORMS" = both ] || [ "$PLATFORMS" = android ]; then want_android=true; fi
+          if [ "$PLATFORMS" = both ] || [ "$PLATFORMS" = ios ]; then want_ios=true; fi
+          {
+            echo "### Release preflight (platforms: $PLATFORMS)"
+            if [ "$want_android" = true ]; then
+              if [ -z "$missing_android" ]; then echo "- Android: ready"; else echo "- Android: SKIPPED, missing secrets:$missing_android"; fi
+            fi
+            if [ "$want_ios" = true ]; then
+              if [ -z "$missing_ios" ]; then echo "- iOS: ready"; else echo "- iOS: SKIPPED, missing secrets:$missing_ios"; fi
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          android=false; ios=false
+          if [ "$want_android" = true ] && [ -z "$missing_android" ]; then android=true; fi
+          if [ "$want_ios" = true ] && [ -z "$missing_ios" ]; then ios=true; fi
+          echo "android=$android" >> "$GITHUB_OUTPUT"
+          echo "ios=$ios" >> "$GITHUB_OUTPUT"
+
+  android:
+    name: android release (Play internal)
+    needs: preflight
+    if: needs.preflight.outputs.android == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Write signing and app config files
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          REVENUECAT_ANDROID_KEY: ${{ secrets.REVENUECAT_ANDROID_KEY }}
+        run: |
+          umask 077
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/keystore.jks"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" > "$RUNNER_TEMP/play-service-account.json"
+          {
+            echo "SUPABASE_URL=$SUPABASE_URL"
+            echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY"
+            echo "REVENUECAT_KEY_ANDROID=$REVENUECAT_ANDROID_KEY"
+          } >> local.properties
+          echo "SUPPLY_JSON_KEY=$RUNNER_TEMP/play-service-account.json" >> "$GITHUB_ENV"
+          chmod +x gradlew
+
+      - name: Build AAB and upload to Play internal track
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD || secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_PACKAGE_NAME: ${{ vars.ANDROID_PACKAGE_NAME }}
+        run: |
+          bundle exec fastlane android build \
+            keystore_path:"$RUNNER_TEMP/keystore.jks" \
+            keystore_password:"$KEYSTORE_PASSWORD" \
+            key_alias:"$KEY_ALIAS" \
+            key_password:"$KEY_PASSWORD"
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mindful-sports-release-aab
+          path: composeApp/build/outputs/bundle/release/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Remove signing files
+        if: ${{ always() }}
+        run: rm -f "$RUNNER_TEMP/keystore.jks" "$RUNNER_TEMP/play-service-account.json" local.properties
+
+  ios:
+    name: ios release (TestFlight)
+    needs: preflight
+    if: needs.preflight.outputs.ios == 'true'
+    runs-on: macos-latest
+    environment: production
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Write ASC API key
+        env:
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+        run: |
+          umask 077
+          echo "$ASC_KEY_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/AuthKey.p8"
+          echo "ASC_KEY_PATH=$RUNNER_TEMP/AuthKey.p8" >> "$GITHUB_ENV"
+          chmod +x gradlew
+
+      - name: Build IPA and upload to TestFlight
+        env:
+          CI: "true"
+          FASTLANE_SKIP_UPDATE_CHECK: "1"
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCESS_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          REVENUECAT_IOS_KEY: ${{ secrets.REVENUECAT_IOS_KEY }}
+          IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
+          IOS_SCHEME: ${{ vars.IOS_SCHEME }}
+        run: |
+          bundle exec fastlane ios build \
+            supabase_url:"$SUPABASE_URL" \
+            supabase_key:"$SUPABASE_ANON_KEY" \
+            revenuecat_key:"$REVENUECAT_IOS_KEY"
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mindful-sports-ios-ipa
+          path: build/ios/*.ipa
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Remove ASC key
+        if: ${{ always() }}
+        run: rm -f "$RUNNER_TEMP/AuthKey.p8"
