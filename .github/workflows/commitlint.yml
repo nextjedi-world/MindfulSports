@@ -1,0 +1,12 @@
+name: commitlint
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  commitlint:
+    uses: nextjedi/platform/.github/workflows/commitlint.yml@main

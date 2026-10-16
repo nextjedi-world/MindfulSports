@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  kmp:
+    uses: nextjedi/platform/.github/workflows/ci-kmp.yml@main
+    with:
+      working-directory: .
+      java-version: "21"
+      # Public repo: never run on self-hosted runners, so the Mac (iOS) job stays off.
+      run-ios: false
+    secrets: inherit

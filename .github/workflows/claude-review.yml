@@ -1,0 +1,18 @@
+name: Claude review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  review:
+    # Off until the repo variable CLAUDE_REVIEW_ENABLED is 'true' and CLAUDE_CODE_OAUTH_TOKEN is set.
+    if: vars.CLAUDE_REVIEW_ENABLED == 'true'
+    uses: nextjedi/platform/.github/workflows/claude-review.yml@main
+    secrets: inherit
