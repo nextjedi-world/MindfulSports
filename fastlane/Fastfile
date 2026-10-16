@@ -1,0 +1,117 @@
+default_platform(:ios)
+
+# Identifiers default to Mindful Sports; override with the repo variables
+# ANDROID_PACKAGE_NAME / IOS_BUNDLE_ID / IOS_SCHEME (the release workflow passes them through).
+BUNDLE_ID    = ENV["IOS_BUNDLE_ID"].to_s.empty? ? "com.mindful.sports" : ENV["IOS_BUNDLE_ID"]
+PACKAGE_NAME = ENV["ANDROID_PACKAGE_NAME"].to_s.empty? ? "com.mindful.sports" : ENV["ANDROID_PACKAGE_NAME"]
+APP_NAME     = "Mindful Sports"
+IOS_SCHEME   = ENV["IOS_SCHEME"].to_s.empty? ? "iosApp" : ENV["IOS_SCHEME"]
+
+# App Store Connect API key (preferred over an Apple ID login in CI).
+# Needs ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_PATH (path to the .p8 file).
+def asc_api_key
+  return nil if ENV["ASC_KEY_ID"].to_s.empty?
+  app_store_connect_api_key(
+    key_id:       ENV["ASC_KEY_ID"],
+    issuer_id:    ENV["ASC_ISSUER_ID"],
+    key_filepath: ENV["ASC_KEY_PATH"],
+    in_house:     false,
+  )
+end
+
+# ── iOS Lanes ─────────────────────────────────────────────────────────────────
+
+platform :ios do
+
+  # Build and upload to TestFlight.
+  # Usage (CI): fastlane ios build supabase_url:"..." supabase_key:"..." revenuecat_key:"..."
+  lane :build do |options|
+    setup_ci if ENV["CI"]  # temporary keychain so match can import the certificate
+
+    api_key = asc_api_key
+
+    match(
+      type:           "appstore",
+      app_identifier: BUNDLE_ID,
+      readonly:       true,
+      api_key:        api_key,
+    )
+
+    gym(
+      scheme:           IOS_SCHEME,
+      configuration:    "Release",
+      export_method:    "app-store",
+      output_directory: "build/ios",
+      output_name:      "#{IOS_SCHEME}.ipa",
+      xcargs: [
+        "SUPABASE_URL=#{options[:supabase_url] || ''}",
+        "SUPABASE_ANON_KEY=#{options[:supabase_key] || ''}",
+        "REVENUECAT_KEY=#{options[:revenuecat_key] || ''}",
+      ].join(" "),
+    )
+
+    pilot(
+      app_identifier:                    BUNDLE_ID,
+      ipa:                               "build/ios/#{IOS_SCHEME}.ipa",
+      api_key:                           api_key,
+      skip_waiting_for_build_processing: true,
+      changelog:                         "Automated build — #{APP_NAME}",
+    )
+  end
+
+  # One-time setup: generate/sync code-signing certs for the bundle ID.
+  # Run locally on a machine with Apple Developer access.
+  # Usage: fastlane ios setup_signing
+  lane :setup_signing do
+    match(
+      type:           "appstore",
+      app_identifier: BUNDLE_ID,
+      readonly:       false,
+    )
+  end
+
+  # One-time: create the App Store Connect listing.
+  # Usage: fastlane ios create_listing
+  lane :create_listing do
+    produce(
+      app_identifier: BUNDLE_ID,
+      app_name:       APP_NAME,
+      language:       "English",
+      app_version:    "2.0",
+      sku:            "mindful_sports",
+    )
+  end
+
+end
+
+# ── Android Lanes ─────────────────────────────────────────────────────────────
+
+platform :android do
+
+  # Build release AAB and upload to Play Store internal track.
+  # Usage (CI): fastlane android build keystore_path:"/path/ks.jks" ...
+  # The Play service account key is read from SUPPLY_JSON_KEY (path to the JSON file).
+  lane :build do |options|
+    gradle(
+      task:        "bundle",
+      build_type:  "Release",
+      project_dir: "./",
+      flags:       "--no-daemon",
+      properties: {
+        "android.injected.signing.store.file"     => options[:keystore_path],
+        "android.injected.signing.store.password" => options[:keystore_password],
+        "android.injected.signing.key.alias"      => options[:key_alias],
+        "android.injected.signing.key.password"   => options[:key_password],
+      },
+    )
+
+    supply(
+      package_name:   PACKAGE_NAME,
+      aab:            lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH] ||
+                      Dir.glob("composeApp/build/outputs/bundle/release/*.aab").first,
+      track:          "internal",
+      release_status: "draft",
+    )
+  end
+
+end
